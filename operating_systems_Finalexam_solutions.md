@@ -128,67 +128,198 @@ Sum of resources currently allocated across all processes ($P_1, P_2, P_3, P_4$)
 * $R_3 = 0 + 2 + 1 + 2 = 5$  
 $$\text{Total Allocated} = \begin{bmatrix} 9 & 2 & 5 \end{bmatrix}$$
 
-#### Step B: Verify / Calculate Available Vector
-Given Resource Vector = $\begin{bmatrix} 9 & 3 & 6 \end{bmatrix}$  
-$$\text{Available} = \text{Total Resources} - \text{Total Allocated}$$
-$$\text{Available} = \begin{bmatrix} 9 & 3 & 6 \end{bmatrix} - \begin{bmatrix} 9 & 2 & 5 \end{bmatrix} = \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}$$
-*(This matches the problem statement's given Available vector).*
+Step B: Calculate the Available Vector
+Formula:
+\[
+Available = Total\ Resources - Total\ Allocated
+\]
 
-#### Step C: Calculate the Need Matrix ($\text{Need} = \text{Max} - \text{Allocation}$)
+Given:
+- Total Resources = (9, 3, 6)
+- Total Allocated = (9, 2, 5)
+Calculation:
+\[
+Available=(9,3,6)-(9,2,5)
+\]
 
-* **Process $P_1$:**
-  * $\text{Max} = \begin{bmatrix} 3 & 2 & 2 \end{bmatrix}$
-  * $\text{Allocation} = \begin{bmatrix} 1 & 0 & 0 \end{bmatrix}$
-  * $\text{Need}_1 = \begin{bmatrix} 3-1 & 2-0 & 2-0 \end{bmatrix} = \begin{bmatrix} 2 & 2 & 2 \end{bmatrix}$
+\[
+\boxed{Available=(0,1,1)}
+\]
 
-* **Process $P_2$:**
-  * $\text{Max} = \begin{bmatrix} 6 & 1 & 3 \end{bmatrix}$
-  * $\text{Allocation} = \begin{bmatrix} 6 & 1 & 2 \end{bmatrix}$
-  * $\text{Need}_2 = \begin{bmatrix} 6-6 & 1-1 & 3-2 \end{bmatrix} = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}$
+Explanation in Roman Urdu: Total resources mein se jitne resources processes ko already diye gaye hain, unko minus karte hain. Jo resources bach jate hain, unhein Available kehte hain.
+Step C: Calculate the Need Matrix
+Formula:
+\[
+Need = Max - Allocation
+\]
 
-* **Process $P_3$:**
-  * $\text{Max} = \begin{bmatrix} 3 & 1 & 4 \end{bmatrix}$
-  * $\text{Allocation} = \begin{bmatrix} 2 & 1 & 1 \end{bmatrix}$
-  * $\text{Need}_3 = \begin{bmatrix} 3-2 & 1-1 & 4-1 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 3 \end{bmatrix}$
+Need ka matlab hai ke kisi process ko complete hone ke liye mazeed kitne resources chahiye.
+1. Process P1
+Max = (3, 2, 2)
+Allocation = (1, 0, 0)
+\[
+Need_1=(3-1,2-0,2-0)
+\]
 
-* **Process $P_4$:**
-  * $\text{Max} = \begin{bmatrix} 4 & 2 & 2 \end{bmatrix}$
-  * $\text{Allocation} = \begin{bmatrix} 0 & 0 & 2 \end{bmatrix}$
-  * $\text{Need}_4 = \begin{bmatrix} 4-0 & 2-0 & 2-2 \end{bmatrix} = \begin{bmatrix} 4 & 2 & 0 \end{bmatrix}$
+\[
+\boxed{Need_1=(2,2,2)}
+\]
 
----
+2. Process P2
+Max = (6, 1, 3)
+Allocation = (6, 1, 2)
+\[
+Need_2=(6-6,1-1,3-2)
+\]
 
-#### Step D: Safety Algorithm Execution
+\[
+\boxed{Need_2=(0,0,1)}
+\]
 
-* **Initial Available Vector:** $Work = \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}$
+3. Process P3
+Max = (3, 1, 4)
+Allocation = (2, 1, 1)
+\[
+Need_3=(3-2,1-1,4-1)
+\]
 
-1. **Check $P_1$:** $\text{Need}_1 = \begin{bmatrix} 2 & 2 & 2 \end{bmatrix}$  
-   Is $\text{Need}_1 \le Work$ ($\begin{bmatrix} 2 & 2 & 2 \end{bmatrix} \le \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}$)? **No.** (Cannot run yet).
+\[
+\boxed{Need_3=(1,0,3)}
+\]
 
-2. **Check $P_2$:** $\text{Need}_2 = \begin{bmatrix} 0 & 0 & 1 \end{bmatrix}$  
-   Is $\text{Need}_2 \le Work$ ($\begin{bmatrix} 0 & 0 & 1 \end{bmatrix} \le \begin{bmatrix} 0 & 1 & 1 \end{bmatrix}$)? **Yes!**  
-   * Execute $P_2$: Release its allocation back to Work.  
-   * $Work = Work + \text{Allocation}_2 = \begin{bmatrix} 0 & 1 & 1 \end{bmatrix} + \begin{bmatrix} 6 & 1 & 2 \end{bmatrix} = \begin{bmatrix} 6 & 2 & 3 \end{bmatrix}$.  
-   * **Process $P_2$ completes successfully.** (Safe Sequence so far: $<P_2>$)
+4. Process P4
+Max = (4, 2, 2)
+Allocation = (0, 0, 2)
+\[
+Need_4=(4-0,2-0,2-2)
+\]
 
-3. **Check $P_1$:** $\text{Need}_1 = \begin{bmatrix} 2 & 2 & 2 \end{bmatrix}$  
-   Is $\text{Need}_1 \le Work$ ($\begin{bmatrix} 2 & 2 & 2 \end{bmatrix} \le \begin{bmatrix} 6 & 2 & 3 \end{bmatrix}$)? **Yes!**  
-   * Execute $P_1$:  
-   * $Work = Work + \text{Allocation}_1 = \begin{bmatrix} 6 & 2 & 3 \end{bmatrix} + \begin{bmatrix} 1 & 0 & 0 \end{bmatrix} = \begin{bmatrix} 7 & 2 & 3 \end{bmatrix}$.  
-   * **Process $P_1$ completes.** (Safe Sequence: $<P_2, P_1>$)
+\[
+\boxed{Need_4=(4,2,0)}
+\]
 
-4. **Check $P_3$:** $\text{Need}_3 = \begin{bmatrix} 1 & 0 & 3 \end{bmatrix}$  
-   Is $\text{Need}_3 \le Work$ ($\begin{bmatrix} 1 & 0 & 3 \end{bmatrix} \le \begin{bmatrix} 7 & 2 & 3 \end{bmatrix}$)? **Yes!**  
-   * Execute $P_3$:  
-   * $Work = Work + \text{Allocation}_3 = \begin{bmatrix} 7 & 2 & 3 \end{bmatrix} + \begin{bmatrix} 2 & 1 & 1 \end{bmatrix} = \begin{bmatrix} 9 & 3 & 4 \end{bmatrix}$.  
-   * **Process $P_3$ completes.** (Safe Sequence: $<P_2, P_1, P_3>$)
+Final Need Matrix
+Process	Need A	Need B	Need C
+P1	2	2	2
+P2	0	0	1
+P3	1	0	3
+P4	4	2	0
+Roman Urdu: Har process ki Max value mein se uski Allocation value minus karein. Is se pata chalta hai ke process ko abhi aur kitne resources chahiye.
 
-5. **Check $P_4$:** $\text{Need}_4 = \begin{bmatrix} 4 & 2 & 0 \end{bmatrix}$  
-   Is $\text{Need}_4 \le Work$ ($\begin{bmatrix} 4 & 2 & 0 \end{bmatrix} \le \begin{bmatrix} 9 & 3 & 4 \end{bmatrix}$)? **Yes!**  
-   * Execute $P_4$:  
-   * $Work = Work + \text{Allocation}_4 = \begin{bmatrix} 9 & 3 & 4 \end{bmatrix} + \begin{bmatrix} 0 & 0 & 2 \end{bmatrix} = \begin{bmatrix} 9 & 3 & 6 \end{bmatrix}$.  
-   * **Process $P_4$ completes.** (Safe Sequence: $<P_2, P_1, P_3, P_4>$)
+Step D: Execute the Safety Algorithm
+Initial Available / Work:
+\[
+Work=(0,1,1)
+\]
 
+Rule: Agar Need ≤ Work ho, to process execute ho sakta hai. Jab process complete hota hai, uske allocated resources wapas Available resources mein add ho jate hain.
+Step 1: Check Process P1
+Need of P1 = (2, 2, 2)
+Work = (0, 1, 1)
+\[
+(2,2,2)\nleq(0,1,1)
+\]
+
+Result: P1 cannot execute because sufficient resources are not available.
+Roman Urdu: P1 ko 2 units A chahiye, lekin available A sirf 0 hai. Is liye P1 abhi execute nahi ho sakta.
+Step 2: Check Process P2
+Need of P2 = (0, 0, 1)
+Work = (0, 1, 1)
+\[
+(0,0,1)\leq(0,1,1)
+\]
+
+Result: P2 can execute successfully.
+P2 complete hone ke baad uske allocated resources wapas add honge.
+\[
+Work=Work+Allocation_2
+\]
+
+\[
+=(0,1,1)+(6,1,2)
+\]
+
+\[
+\boxed{Work=(6,2,3)}
+\]
+
+Safe sequence: <P2>
+Roman Urdu: P2 ko jitne resources chahiye thay, woh available hain. Is liye P2 complete ho gaya aur uske resources wapas mil gaye.
+Step 3: Check Process P1 Again
+Need of P1 = (2, 2, 2)
+Work = (6, 2, 3)
+\[
+(2,2,2)\leq(6,2,3)
+\]
+
+Result: P1 can execute successfully.
+\[
+Work=Work+Allocation_1
+\]
+
+\[
+=(6,2,3)+(1,0,0)
+\]
+
+\[
+\boxed{Work=(7,2,3)}
+\]
+
+Safe sequence: <P2, P1>
+Roman Urdu: P2 complete hone ke baad resources barh gaye. Ab P1 ki requirement bhi poori ho rahi hai, is liye P1 complete ho sakta hai.
+Step 4: Check Process P3
+Need of P3 = (1, 0, 3)
+Work = (7, 2, 3)
+\[
+(1,0,3)\leq(7,2,3)
+\]
+
+Result: P3 can execute successfully.
+\[
+Work=Work+Allocation_3
+\]
+
+\[
+=(7,2,3)+(2,1,1)
+\]
+
+\[
+\boxed{Work=(9,3,4)}
+\]
+
+Safe sequence: <P2, P1, P3>
+Roman Urdu: Ab P3 ki required resources bhi available hain. P3 complete hone par uske allocated resources wapas add kar dein.
+Step 5: Check Process P4
+Need of P4 = (4, 2, 0)
+Work = (9, 3, 4)
+\[
+(4,2,0)\leq(9,3,4)
+\]
+
+Result: P4 can execute successfully.
+\[
+Work=Work+Allocation_4
+\]
+
+\[
+=(9,3,4)+(0,0,2)
+\]
+
+\[
+\boxed{Work=(9,3,6)}
+\]
+
+Final Safe Sequence:
+\[
+\boxed{\langle P2,P1,P3,P4\rangle}
+\]
+
+Roman Urdu: P4 bhi successfully complete ho gaya. Ab saare processes complete ho sakte hain, is liye system safe state mein hai.
+
+Final Conclusion
+The system is in a safe state because all four processes can complete successfully in the following safe sequence:
+P2 → P1 → P3 → P4
+Therefore, the given system satisfies the safety condition of the Banker's Algorithm.
 ### Conclusion for Q1(b):
 The system is in a **Safe State**.  
 A valid **Safe Sequence** is: **$<P_2, P_1, P_3, P_4>$**
